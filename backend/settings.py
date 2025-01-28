@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'wbaDb',
-        'USER': 'wba-web-admin',
-        'PASSWORD': 'AVNS_AgkJuPTNaakigM3o1Ad',
-        'HOST': 'dbaas-db-9813831-do-user-18920330-0.j.db.ondigitalocean.com',
-        'PORT': 25060,
+        'NAME': 'wbaDB',
+        'USER': 'wbauser',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
