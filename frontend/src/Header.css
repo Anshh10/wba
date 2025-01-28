@@ -1,0 +1,158 @@
+.navbarBg {
+  padding-bottom: 10px;
+  background: rgb(33, 31, 46);
+  /* background: linear-gradient(132deg, rgba(55,3,122,1) 0%, rgba(37,6,79,1) 100%); */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  margin-bottom: 0px;   
+  min-height: 90px;
+}
+
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+  padding: 25px 15px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.navbar-dark:hover .navbar-nav:hover .nav-link:hover{
+  color: rgb(33, 31, 46);
+  background: #fff;
+  transition: 800ms;
+  cursor: pointer;
+} 
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+  background: rgb(33, 31, 46);
+  color: #fff;
+  border: 1px;
+  min-width: 200px;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.dropdown-item, .dropdown-item:hover{
+  color: rgb(33, 31, 46);
+  background: #fff;
+  cursor: pointer;
+}
+
+.dropdown-header {
+  display: block;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: #face1d;
+  font-weight: 500;
+  white-space: nowrap;
+  font-family: "Montserrat", sans-serif;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  text-decoration: none;
+  color: #fff;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-menu.show {
+  position: static;
+}
+
+@media screen and (max-width: 1600px) {
+
+
+  /* .customDropdown1{
+    border-bottom: 0;
+    margin: 0 !important;
+    padding-bottom: 10px;
+  }
+  
+  .customDropdown2{
+    padding-top: 10px;
+    width: 90%;
+  }
+  
+  
+  .customDropdownItem1 {
+    border-right: 0;
+  } */
+
+  .customDropdown1{
+    margin: 0 !important;
+  }
+  
+  .customDropdown2{
+    margin: 0 !important;
+  }
+  
+  
+
+}
+
+
+@media screen and (max-width: 960px) {
+  .navbarBg {
+    padding-bottom: 10px;
+    background: rgb(55,3,122);
+    background: linear-gradient(132deg, rgba(55,3,122,1) 0%, rgba(37,6,79,1) 100%);
+    margin-bottom: 0px;   
+    min-height: 70px;
+    }
+
+  .customDropdown1{
+    width: 90%;
+    border-bottom: 0;
+    margin: 0 !important;
+  }
+  
+  .customDropdown2{
+    width: 90%;
+  }
+  
+  
+  .customDropdownItem1 {
+    border-right: 0;
+  }
+  
+
+  .brandImage{
+    color: #fff;
+    height: 60px;
+    width: 60px;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    text-align: center;
+    color: #fff;
+    padding: 30px 10px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+  }
+
+  .navbar-expand-lg .navbar-nav .dropdown-menu {
+    background: rgb(33, 31, 46);
+    color: #fff;
+    align-items: center;
+    width: 100%;
+  }
+
+}
