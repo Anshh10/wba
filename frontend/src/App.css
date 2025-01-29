@@ -8,6 +8,7 @@
   outline: none;
   border: none;
   cursor: pointer;
+  min-width: 200px;
 }
 
 .btn--primary {

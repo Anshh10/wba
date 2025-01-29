@@ -148,12 +148,22 @@ def getPlayers(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def getPlayer(request, id):
-    response = Player.objects.get(id=id)
-    serializer = PlayerSerializer(response, many=False)
+    if request.method == 'GET':
+        response = Player.objects.get(id=id)
+        serializer = PlayerSerializer(response, many=False)
 
-    return Response(serializer.data)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        response = Player.objects.get(id=id)
+        serializer = PlayerSerializer(response, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -173,12 +183,22 @@ def getactivePlayers(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def getactivePlayer(request, id):
-    response = activePlayer.objects.get(id=id)
-    serializer = activePlayerSerializer(response, many=False)
+    if request.method == 'GET':
+        response = activePlayer.objects.get(id=id)
+        serializer = activePlayerSerializer(response, many=False)
 
-    return Response(serializer.data)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        response = activePlayer.objects.get(id=id)
+        serializer = activePlayerSerializer(response, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # @api_view(['GET'])
