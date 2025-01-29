@@ -3,8 +3,8 @@ from datetime import timedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import AuctionBid, Player, User, activePlayer
-from .serializers import AuctionBidSerializer, PlayerSerializer, activePlayerSerializer, UserSerializer, CrtUserSerializer, MyTokenObtainPairSerializer
+from .models import AuctionBid, Player, User, activePlayer, Budget
+from .serializers import AuctionBidSerializer, PlayerSerializer, activePlayerSerializer, UserSerializer, CrtUserSerializer, MyTokenObtainPairSerializer, BudgetSerializer
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -195,6 +195,41 @@ def getactivePlayer(request, id):
     elif request.method == 'PUT':
         response = activePlayer.objects.get(id=id)
         serializer = activePlayerSerializer(response, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def getBudgets(request):
+    if request.method == 'GET':
+        response = Budget.objects.all()
+        serializer = BudgetSerializer(response, many=True)
+
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = BudgetSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+def getBudget(request, id):
+    if request.method == 'GET':
+        response = Budget.objects.get(id=id)
+        serializer = BudgetSerializer(response, many=False)
+
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        response = Budget.objects.get(id=id)
+        serializer = BudgetSerializer(response, data=request.data)
         if serializer.is_valid():
             serializer.save()
 

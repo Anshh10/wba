@@ -134,14 +134,6 @@ function Login() {
                       Submit
                     </Button>
                   </Col>
-                  <Col>
-                    <Link to="/forgot-password">
-                      <p className="signUpLinks">Forgot Password</p>
-                    </Link>
-                    <Link to="/register">
-                      <p className="signUpLinks">New User? Register here</p>
-                    </Link>
-                  </Col>
                 </Row>
                 <div className="has-error">
                   <div className="help-block">{errorMsg}</div>

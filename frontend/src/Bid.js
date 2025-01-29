@@ -128,12 +128,9 @@ const Bid = () => {
         setCurrentBidder(latestBid.teamname);
         setNextBid(calculateNextBid(latestBid.amount * 1));
 
-        console.log(player_id);
-        console.log(player_id === 2);
-
-        if (calculateNextBid(latestBid.amount * 1) > budget) {
-          setBidLock(calculateNextBid(latestBid.amount * 1) > budget);
-        } else if (latestBid.lock_timestamp) {
+        // if (calculateNextBid(latestBid.amount * 1) > budget) {
+        // } else
+        if (latestBid.lock_timestamp) {
           const lockTime = new Date(latestBid.lock_timestamp).getTime();
           const currentTime = new Date().getTime();
           const bidAmount = latestBid.amount * 1; // Ensure it's a number
@@ -391,6 +388,31 @@ const Bid = () => {
                             overlay={
                               <Tooltip id="tooltip-disabled">
                                 Please wait for the next player
+                              </Tooltip>
+                            }
+                          >
+                            <Row>
+                              <Button
+                                className="btn--four"
+                                type="submit"
+                                disabled="true"
+                              >
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Bid
+                              </Button>
+                            </Row>
+                          </OverlayTrigger>
+                        );
+                      } else if (nextBid > budget) {
+                        return (
+                          <OverlayTrigger
+                            style={{ width: "100%" }}
+                            overlay={
+                              <Tooltip id="tooltip-disabled">
+                                You've exceeded your budget
                               </Tooltip>
                             }
                           >
