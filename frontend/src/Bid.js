@@ -11,6 +11,7 @@ import {
   Tooltip,
   DropdownButton,
   Dropdown,
+  Accordion,
 } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
@@ -31,6 +32,7 @@ const Bid = () => {
   const [unsoldPlayers, setunsoldPlayers] = useState([]);
   const [activePlayer, setactivePlayer] = useState([]);
   const [teamSquad, setteamSquad] = useState([]);
+  const [playerBids, setplayerBids] = useState([]);
   const [bidLock, setBidLock] = useState(false);
 
   const getResponse = async () => {
@@ -50,7 +52,7 @@ const Bid = () => {
     setunsoldPlayers(unsold);
 
     const filteredData = res2.data.filter(
-      (player) => player.assignedTo === user.user_id.toString()
+      (player) => player.assignedTo === user.username
     );
     setteamSquad(filteredData);
     console.log(user.user_id, filteredData);
@@ -63,42 +65,47 @@ const Bid = () => {
     setbudget(remainingBudget);
   };
 
-  const [teamPurse, setTeamPurse] = useState([]); // Store all data in one state
-
-  const calculateTeamPurse = async () => {
+  const [teamSquads, setTeamSquads] = useState({});
+  const fetchAndCalculateTeamSquads = async () => {
     try {
-      // Fetch teams and players
-      const teamsRes = await axios.get(`/api/user/players/`);
-      const playersRes = await axios.get(`/api/players/`);
+      // Fetch players
+      const res2 = await axios.get(`/api/players/`);
+      const allPlayers = res2.data;
 
-      // Create a mapping of teamId -> totalSpentAmount
-      const teamBudgetMap = {};
-      playersRes.data.forEach((player) => {
-        const teamId = player.assignedTo;
-        if (!teamBudgetMap[teamId]) {
-          teamBudgetMap[teamId] = 0;
+      setplayers(allPlayers);
+
+      // Initialize budget
+      const TOTAL_BUDGET = 200000000;
+
+      // Group players by assignedTo and calculate budgets
+      const squads = allPlayers.reduce((teams, player) => {
+        const teamName = player.assignedTo;
+
+        if (teamName) {
+          if (!teams[teamName]) {
+            teams[teamName] = {
+              players: [],
+              budget: TOTAL_BUDGET, // Start with the total budget
+            };
+          }
+          teams[teamName].players.push(player);
+
+          // Subtract player's "amt" from the team's budget
+          teams[teamName].budget -= player.amt;
         }
-        teamBudgetMap[teamId] += player.amt * 1;
-      });
 
-      // Ensure all teams are considered, even those with no players
-      const teamPurseData = teamsRes.data.map((team) => {
-        const spentAmount = teamBudgetMap[team.id] || 0; // If no players, spent amount = 0
-        return {
-          teamId: team.id,
-          teamName: team.username, // Using username as team name
-          remainingBudget: 200000000 - spentAmount, // 20 Crores - spent amount
-        };
-      });
+        return teams;
+      }, {});
 
-      setTeamPurse(teamPurseData); // Store all data in one state
+      setTeamSquads(squads);
+      console.log(squads);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    calculateTeamPurse();
+    fetchAndCalculateTeamSquads();
     getResponse();
   }, [player_id]);
 
@@ -110,6 +117,8 @@ const Bid = () => {
       const bid = await axios.get(
         `/api/player-bids/${activeplayer.data.activePlayer_id}`
       );
+      console.log(bid.data);
+      setplayerBids(bid.data);
 
       if (bid.data.length > 0) {
         console.log(bid.data);
@@ -187,7 +196,7 @@ const Bid = () => {
     event.preventDefault();
     let formField = new FormData();
 
-    formField.append("assignedTo", user.user_id);
+    formField.append("assignedTo", currentBidder);
     formField.append("amt", currentBid);
     // formField.append("teamname", user.username);
 
@@ -310,33 +319,26 @@ const Bid = () => {
                           </Dropdown.Item>
                         ))}
                       </DropdownButton>
+                      <h3>Previous Bids</h3>
                       <Table responsive="md" striped bordered>
                         <thead className="tableHead">
                           <tr>
                             <th>S. No.</th>
-                            <th>Player Name</th>
-                            <th>Type</th>
-                            <th>Base Price</th>
-                            <th>Sold Status</th>
+                            <th>Team Name</th>
+                            <th>Bid Amount</th>
                           </tr>
                         </thead>
                         <tbody className="tableBody">
-                          {players
+                          {playerBids
                             .slice(0)
                             .reverse()
                             .map((player, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{player.name}</td>
-                                <td>{player.role}</td>
-                                <td>₹{player.basePrice / 10000000} Cr</td>
-                                {(() => {
-                                  if (player.assignedTo) {
-                                    return <td>Sold</td>;
-                                  } else {
-                                    return <td>Unsold</td>;
-                                  }
-                                })()}
+                                <td style={{ textTransform: "capitalize" }}>
+                                  {player.teamname}
+                                </td>
+                                <td>₹{player.amount / 10000000} Cr</td>
                               </tr>
                             ))}
                         </tbody>
@@ -501,25 +503,49 @@ const Bid = () => {
             </Col>
           </Row>
         </Form>
-        <Row>
-          <h3>Team Pockets</h3>
-          <Table bordered hover responsive className="text-center">
-            <thead>
-              <tr>
-                <th>Team Name</th>
-                <th>Remaining Budget (₹)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {teamPurse.map(({ teamId, teamName, remainingBudget }) => (
-                <tr key={teamId}>
-                  <td style={{ textTransform: "uppercase" }}>{teamName}</td>
-                  <td>₹{remainingBudget / 10000000} Cr</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Row>
+        <h3>Team Pockets</h3>
+        <Accordion defaultActiveKey="0">
+          {Object.keys(teamSquads).length > 0 ? (
+            Object.entries(teamSquads).map(
+              ([teamName, { players: squad, budget }], index) => (
+                <Accordion.Item eventKey={index.toString()} key={teamName}>
+                  <Accordion.Header>
+                    {teamName === user.username
+                      ? `${teamName} (Your Team)`
+                      : teamName}{" "}
+                    | ₹{budget / 10000000} Cr
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {squad.length > 0 ? (
+                      <Table bordered hover responsive className="text-center">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Amount (₹)</th>
+                            <th>Role</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {squad.map((player) => (
+                            <tr key={player.id}>
+                              <td>{player.name}</td>
+                              <td>{player.amt / 10000000} Cr</td>
+                              <td>{player.role || "N/A"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    ) : (
+                      <p>No players in this squad.</p>
+                    )}
+                  </Accordion.Body>
+                </Accordion.Item>
+              )
+            )
+          ) : (
+            <p>No squads found.</p>
+          )}
+        </Accordion>
       </Container>
     </div>
   );

@@ -159,6 +159,7 @@ def getPlayer(request, id):
     elif request.method == 'PUT':
         response = Player.objects.get(id=id)
         serializer = PlayerSerializer(response, data=request.data)
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
 

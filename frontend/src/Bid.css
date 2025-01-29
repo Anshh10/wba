@@ -22,3 +22,8 @@
     align-items: center;
     justify-content: center;
 }
+
+.accordion-button  {
+    text-transform: uppercase;
+    font-weight: 600;
+}
