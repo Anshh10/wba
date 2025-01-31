@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     accessGroup = models.CharField(max_length=500, null=True, blank=True)
     username = models.CharField(max_length=500, unique=True)
     email = models.EmailField(_('email address'), null=True, blank=True)
-    college = models.CharField(max_length=200, null=True, blank=True)
+    userbudget = models.CharField(max_length=2000, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(

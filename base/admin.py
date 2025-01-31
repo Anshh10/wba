@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 class UserAdminConfig(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email',
-         'username', 'college', 'accessGroup', 'password',)}),
+         'username', 'userbudget', 'accessGroup', 'password',)}),
         ('Permissions', {
          'fields': ('is_staff', 'is_active', 'is_superuser')}),
     )
@@ -14,7 +14,7 @@ class UserAdminConfig(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email',  'password1', 'password2', 'username', 'college', 'accessGroup',
+            'fields': ('email',  'password1', 'password2', 'username', 'userbudget', 'accessGroup',
                        'is_staff', 'is_active', 'is_superuser',)}),
     )
 

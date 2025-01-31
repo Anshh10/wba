@@ -26,7 +26,7 @@ const Bid = () => {
   const [currentBidder, setCurrentBidder] = useState("");
   const [nextBid, setNextBid] = useState(0);
 
-  const [budget, setbudget] = useState(200000000);
+  const [budget, setbudget] = useState(0);
   const [players, setplayers] = useState([]);
   const [soldPlayers, setsoldPlayers] = useState([]);
   const [unsoldPlayers, setunsoldPlayers] = useState([]);
@@ -43,7 +43,9 @@ const Bid = () => {
     setNextBid(calculateNextBid(latestBid));
 
     const res2 = await axios.get(`/api/players/`);
-    setplayers(res2.data);
+    const sortedPlayers = res2.data.sort((a, b) => a.id - b.id);
+    setplayers(sortedPlayers);
+    console.log(sortedPlayers);
 
     const sold = res2.data.filter((player) => player.assignedTo);
     setsoldPlayers(sold);
@@ -61,13 +63,24 @@ const Bid = () => {
       (sum, player) => sum + player.amt * 1,
       0
     );
-    const remainingBudget = 200000000 - totalAmt;
+
+    const res3 = await axios.get(`/api/user/player/${user.user_id}`);
+    const remainingBudget = res3.data.userbudget - totalAmt;
     setbudget(remainingBudget);
   };
 
   const [teamSquads, setTeamSquads] = useState({});
   const fetchAndCalculateTeamSquads = async () => {
     try {
+      // Fetch users with the accessGroup "player"
+      const res = await axios.get(`/api/user/players/`);
+      const allUsers = res.data;
+
+      // Filter users with accessGroup "player"
+      const playerUsers = allUsers.filter(
+        (user) => user.accessGroup === "player"
+      );
+
       // Fetch players
       const res2 = await axios.get(`/api/players/`);
       const allPlayers = res2.data;
@@ -75,24 +88,28 @@ const Bid = () => {
       setplayers(allPlayers);
 
       // Initialize budget
-      const TOTAL_BUDGET = 200000000;
 
-      // Group players by assignedTo and calculate budgets
-      const squads = allPlayers.reduce((teams, player) => {
-        const teamName = player.assignedTo;
+      // Create squads, ensuring all users with accessGroup "player" are included
+      const squads = playerUsers.reduce((teams, user) => {
+        const userName = user.username; // Use user name or any unique identifier for the team
 
-        if (teamName) {
-          if (!teams[teamName]) {
-            teams[teamName] = {
-              players: [],
-              budget: TOTAL_BUDGET, // Start with the total budget
-            };
-          }
-          teams[teamName].players.push(player);
-
-          // Subtract player's "amt" from the team's budget
-          teams[teamName].budget -= player.amt;
+        if (!teams[userName]) {
+          teams[userName] = {
+            players: [],
+            budget: user.userbudget, // Start with the total budget
+          };
         }
+
+        // Attach players assigned to this user
+        const assignedPlayers = allPlayers.filter(
+          (player) => player.assignedTo === userName
+        );
+        teams[userName].players.push(...assignedPlayers);
+
+        // Deduct the budget for assigned players
+        assignedPlayers.forEach((player) => {
+          teams[userName].budget -= player.amt;
+        });
 
         return teams;
       }, {});
@@ -228,13 +245,19 @@ const Bid = () => {
       });
   }
 
-  const [selectedPlayer, setSelectedPlayer] = useState("");
-  const handleSelect = async (playerId) => {
-    const selected = players.find((player) => player.id === parseInt(playerId));
-    setSelectedPlayer(selected); // Set the full player object as the selected player
+  const [selectedIndex, setSelectedIndex] = useState(0); // Track index in unsoldPlayers
+
+  const handlePlayerChange = async (direction) => {
+    let newIndex = selectedIndex + direction;
+
+    // Ensure the index stays within bounds
+    if (newIndex < 0 || newIndex >= players.length) return;
+
+    const newPlayer = players[newIndex];
+    setSelectedIndex(newIndex);
 
     const formField2 = new FormData();
-    formField2.append("activePlayer_id", playerId);
+    formField2.append("activePlayer_id", newPlayer.id);
 
     try {
       const response = await axios.put(`/api/active-player/1/`, formField2);
@@ -300,22 +323,24 @@ const Bid = () => {
                 ) {
                   return (
                     <>
-                      <DropdownButton
-                        id="dropdown-basic-button"
-                        title={
-                          selectedPlayer ? selectedPlayer.name : "Select Player"
-                        } // Show selected player name
-                        onSelect={handleSelect}
-                        style={{ marginBottom: "10px" }}
-                        variant="dark"
-                        menuVariant="dark"
-                      >
-                        {unsoldPlayers.map((player) => (
-                          <Dropdown.Item key={player.id} eventKey={player.id}>
-                            {player.name}
-                          </Dropdown.Item>
-                        ))}
-                      </DropdownButton>
+                      <div>
+                        <Button
+                          className="btn--secondary"
+                          style={{ margin: "0 5px" }}
+                          onClick={() => handlePlayerChange(-1)}
+                          disabled={selectedIndex === 0}
+                        >
+                          Previous Player
+                        </Button>
+                        <Button
+                          className="btn--secondary"
+                          style={{ margin: "0 5px" }}
+                          onClick={() => handlePlayerChange(1)}
+                          disabled={selectedIndex === players.length - 1}
+                        >
+                          Next Player
+                        </Button>
+                      </div>
                       <h3>Previous Bids</h3>
                       <Table responsive="md" striped bordered>
                         <thead className="tableHead">
@@ -406,6 +431,31 @@ const Bid = () => {
                             </Row>
                           </OverlayTrigger>
                         );
+                      } else if (activePlayer.assignedTo !== null) {
+                        return (
+                          <OverlayTrigger
+                            style={{ width: "100%" }}
+                            overlay={
+                              <Tooltip id="tooltip-disabled">
+                                The player is already sold
+                              </Tooltip>
+                            }
+                          >
+                            <Row>
+                              <Button
+                                className="btn--four"
+                                type="submit"
+                                disabled="true"
+                              >
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Bid
+                              </Button>
+                            </Row>
+                          </OverlayTrigger>
+                        );
                       } else if (nextBid > budget) {
                         return (
                           <OverlayTrigger
@@ -413,6 +463,31 @@ const Bid = () => {
                             overlay={
                               <Tooltip id="tooltip-disabled">
                                 You've exceeded your budget
+                              </Tooltip>
+                            }
+                          >
+                            <Row>
+                              <Button
+                                className="btn--four"
+                                type="submit"
+                                disabled="true"
+                              >
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Bid
+                              </Button>
+                            </Row>
+                          </OverlayTrigger>
+                        );
+                      } else if (currentBidder === user.username) {
+                        return (
+                          <OverlayTrigger
+                            style={{ width: "100%" }}
+                            overlay={
+                              <Tooltip id="tooltip-disabled">
+                                You are the Current Bidder
                               </Tooltip>
                             }
                           >

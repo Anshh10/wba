@@ -30,14 +30,14 @@ class activePlayerSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'college', 'is_staff',
+        fields = ['id', 'username', 'email', 'userbudget', 'is_staff',
                   'accessGroup', 'is_active', 'date_joined', 'password']
 
 
 class CrtUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'college', 'is_staff',
+        fields = ['id', 'username', 'email', 'userbudget', 'is_staff',
                   'accessGroup', 'is_active', 'date_joined', 'password']
 
 
@@ -48,7 +48,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        token['college'] = user.college
+        token['userbudget'] = user.userbudget
         token['accessGroup'] = user.accessGroup
 
         return token

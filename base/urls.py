@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('user/create/', views.crtUsers.as_view(), name='users-create'),
     path('user/players/', views.getUsers, name='users-players'),
+    path('user/player/<str:pk>/', views.getUser, name='user-player'),
     path('login/jwt-token/', views.MyTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('login/jwt-token/refresh/',
