@@ -12,12 +12,18 @@ class Player(models.Model):
     name = models.CharField(max_length=50000, null=True, blank=True)
     role = models.CharField(max_length=50000, null=True, blank=True)
     BattingInnings = models.CharField(max_length=50000, null=True, blank=True)
+    BattingType = models.CharField(max_length=50000, null=True, blank=True)
     BattingRuns = models.CharField(max_length=50000, null=True, blank=True)
     BattingAverage = models.CharField(max_length=50000, null=True, blank=True)
+    BallsFaced = models.CharField(max_length=50000, null=True, blank=True)
+    NoDismissal = models.CharField(max_length=50000, null=True, blank=True)
     BattingStrikeRate = models.CharField(
         max_length=50000, null=True, blank=True)
     Balls = models.CharField(max_length=50000, null=True, blank=True)
     BowlingWickets = models.CharField(max_length=50000, null=True, blank=True)
+    BowlingType1 = models.CharField(max_length=50000, null=True, blank=True)
+    BowlingType2 = models.CharField(max_length=50000, null=True, blank=True)
+    RunsConceded = models.CharField(max_length=50000, null=True, blank=True)
     BowlingAverage = models.CharField(max_length=50000, null=True, blank=True)
     BowlingEconomy = models.CharField(max_length=50000, null=True, blank=True)
     BowlingStrikeRate = models.CharField(

@@ -566,43 +566,63 @@ const Bid = () => {
                 </thead>
                 <tbody className="tableBody">
                   <tr>
-                    <td>Innings</td>
+                    <td>Batting Type</td>
+                    <td>{activePlayer.BattingType}</td>
+                  </tr>
+                  <tr>
+                    <td>Batting Innings</td>
                     <td>{activePlayer.BattingInnings}</td>
                   </tr>
                   <tr>
-                    <td>Runs</td>
+                    <td>Batting Runs</td>
                     <td>{activePlayer.BattingRuns}</td>
                   </tr>
                   <tr>
-                    <td>Average</td>
+                    <td>Balls Faced</td>
+                    <td>{activePlayer.BallsFaced}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Dismissals</td>
+                    <td>{activePlayer.NoDismissal}</td>
+                  </tr>
+                  <tr>
+                    <td>Batting Average</td>
                     <td>{activePlayer.BattingAverage}</td>
                   </tr>
                   <tr>
-                    <td>SR</td>
+                    <td>Batting Strike Rate</td>
                     <td>{activePlayer.BattingStrikeRate}</td>
                   </tr>
                   <tr>
-                    <td>Overs</td>
+                    <td>Balls Bowled</td>
                     <td>{activePlayer.Balls}</td>
                   </tr>
                   <tr>
-                    <td>Wkts</td>
+                    <td>Bowling Type</td>
+                    <td>{activePlayer.BowlingType2}</td>
+                  </tr>
+                  <tr>
+                    <td>Runs Conceded</td>
+                    <td>{activePlayer.RunsConceded}</td>
+                  </tr>
+                  <tr>
+                    <td>Bowling Wickets</td>
                     <td>{activePlayer.BowlingWickets}</td>
                   </tr>
                   <tr>
-                    <td>Ave</td>
+                    <td>Bowling Average</td>
                     <td>{activePlayer.BowlingAverage}</td>
                   </tr>
                   <tr>
-                    <td>Econ</td>
+                    <td>Bowling Economy</td>
                     <td>{activePlayer.BowlingEconomy}</td>
                   </tr>
                   <tr>
-                    <td>SR</td>
+                    <td>Bowling Strike Rate</td>
                     <td>{activePlayer.BowlingStrikeRate}</td>
                   </tr>
                   <tr>
-                    <td>St</td>
+                    <td>Stumping</td>
                     <td>{activePlayer.Stumping}</td>
                   </tr>
                 </tbody>
