@@ -566,24 +566,12 @@ const Bid = () => {
                 </thead>
                 <tbody className="tableBody">
                   <tr>
-                    <td>Batting Type</td>
-                    <td>{activePlayer.BattingType}</td>
-                  </tr>
-                  <tr>
-                    <td>Batting Innings</td>
+                    <td>Innings</td>
                     <td>{activePlayer.BattingInnings}</td>
                   </tr>
                   <tr>
-                    <td>Batting Runs</td>
+                    <td>Runs</td>
                     <td>{activePlayer.BattingRuns}</td>
-                  </tr>
-                  <tr>
-                    <td>Balls Faced</td>
-                    <td>{activePlayer.BallsFaced}</td>
-                  </tr>
-                  <tr>
-                    <td>No of Dismissals</td>
-                    <td>{activePlayer.NoDismissal}</td>
                   </tr>
                   <tr>
                     <td>Batting Average</td>
@@ -594,19 +582,15 @@ const Bid = () => {
                     <td>{activePlayer.BattingStrikeRate}</td>
                   </tr>
                   <tr>
-                    <td>Balls Bowled</td>
-                    <td>{activePlayer.Balls}</td>
+                    <td>Overs</td>
+                    <td>{activePlayer.Balls / 6} Overs</td>
                   </tr>
                   <tr>
                     <td>Bowling Type</td>
                     <td>{activePlayer.BowlingType2}</td>
                   </tr>
                   <tr>
-                    <td>Runs Conceded</td>
-                    <td>{activePlayer.RunsConceded}</td>
-                  </tr>
-                  <tr>
-                    <td>Bowling Wickets</td>
+                    <td>BWickets</td>
                     <td>{activePlayer.BowlingWickets}</td>
                   </tr>
                   <tr>
