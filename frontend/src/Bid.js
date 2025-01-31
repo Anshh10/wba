@@ -122,7 +122,7 @@ const Bid = () => {
   useEffect(() => {
     fetchAndCalculateTeamSquads();
     getResponse();
-  }, [player_id]);
+  }, [player_id, changingPlayer]);
 
   const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
@@ -257,6 +257,7 @@ const Bid = () => {
       setChangingPlayer(false); // Reset if no valid player found
       return;
     }
+    setCurrentBidder("");
 
     // Update state
     setplayer_id(newPlayerId);
@@ -590,7 +591,7 @@ const Bid = () => {
                     <td>{activePlayer.BowlingType2}</td>
                   </tr>
                   <tr>
-                    <td>BWickets</td>
+                    <td>Wickets</td>
                     <td>{activePlayer.BowlingWickets}</td>
                   </tr>
                   <tr>
