@@ -101,10 +101,10 @@ class AuctionBid(models.Model):
         return False
 
 
-class Budget(models.Model):
+class ranNum(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
-    amount = models.CharField(max_length=2550, null=True, blank=True)
+    num = models.CharField(max_length=2550, null=True, blank=True)
 
 
 class activePlayer(models.Model):

@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import AuctionBid, Player, activePlayer, User, Budget
+from .models import AuctionBid, Player, activePlayer, User, ranNum
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-class BudgetSerializer(serializers.ModelSerializer):
+class ranNumSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Budget
+        model = ranNum
         fields = '__all__'
 
 

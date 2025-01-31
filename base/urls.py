@@ -20,5 +20,6 @@ urlpatterns = [
     path('player/<str:id>/', views.getPlayer, name='Player'),
 
     path('active-player/<str:id>/', views.getactivePlayer, name='Active Player'),
+    path('ran-num/<str:id>/', views.getranNum, name='Random Number'),
 
 ]

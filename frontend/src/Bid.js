@@ -35,6 +35,7 @@ const Bid = () => {
   const [playerBids, setplayerBids] = useState([]);
   const [bidLock, setBidLock] = useState(false);
 
+  const [ranNum, setranNum] = useState(0);
   const getResponse = async () => {
     const res = await axios.get(`/api/player/${player_id}`);
     setactivePlayer(res.data);
@@ -66,6 +67,7 @@ const Bid = () => {
 
     const res3 = await axios.get(`/api/user/player/${user.user_id}`);
     const remainingBudget = res3.data.userbudget - totalAmt;
+    console.log(res3.data.userbudget);
     setbudget(remainingBudget);
   };
 
@@ -119,7 +121,6 @@ const Bid = () => {
     }
   };
 
-  const [ranNum, setranNum] = useState(0);
   useEffect(() => {
     fetchAndCalculateTeamSquads();
     getResponse();
@@ -131,16 +132,16 @@ const Bid = () => {
     const activeplayer = await axios.get(`/api/active-player/1`);
     setplayer_id(activeplayer.data.activePlayer_id);
 
+    const res4 = await axios.get(`/api/ran-num/${1}`);
+    setranNum(res4.data.num);
+
     try {
       const bid = await axios.get(
         `/api/player-bids/${activeplayer.data.activePlayer_id}`
       );
-      console.log(bid.data);
       setplayerBids(bid.data);
 
       if (bid.data.length > 0) {
-        console.log(bid.data);
-
         const latestBid = bid.data[bid.data.length - 1];
         setCurrentBid(latestBid.amount * 1);
         setCurrentBidder(latestBid.teamname);
@@ -176,8 +177,9 @@ const Bid = () => {
   useEffect(() => {
     if (!changingPlayer) {
       getBids();
+      getResponse();
     }
-    const interval = setInterval(getBids, 2000); // Fetch every second
+    const interval = setInterval(getBids, 1000); // Fetch every second
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
@@ -231,22 +233,22 @@ const Bid = () => {
         console.log(error);
       });
 
-    // let formField2 = new FormData();
+    let formField2 = new FormData();
 
-    // formField2.append("activePlayer_id", "2");
-    // // formField.append("teamname", user.username);
+    formField2.append("num", ranNum * 1 + 1);
+    // formField.append("teamname", user.username);
 
-    // await axios({
-    //   method: "put",
-    //   url: `/api/active-player/1/`,
-    //   data: formField2,
-    // })
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    await axios({
+      method: "put",
+      url: `/api/ran-num/1/`,
+      data: formField2,
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   const handlePlayerChange = async (direction) => {
@@ -259,7 +261,6 @@ const Bid = () => {
       setChangingPlayer(false); // Reset if no valid player found
       return;
     }
-    setCurrentBidder("");
 
     // Update state
     setplayer_id(newPlayerId);
@@ -469,6 +470,24 @@ const Bid = () => {
                             </Row>
                           </OverlayTrigger>
                         );
+                      } else if (
+                        typeof user !== "undefined" &&
+                        typeof user.username !== "undefined" &&
+                        user.accessGroup === "admin"
+                      ) {
+                        return (
+                          <Button
+                            className="btn--four"
+                            onClick={playerSold}
+                            // disabled={bidLock}
+                          >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            Sold
+                          </Button>
+                        );
                       } else if (nextBid > budget) {
                         return (
                           <OverlayTrigger
@@ -535,24 +554,6 @@ const Bid = () => {
                             <span></span>
                             <span></span>
                             Bid
-                          </Button>
-                        );
-                      } else if (
-                        typeof user !== "undefined" &&
-                        typeof user.username !== "undefined" &&
-                        user.accessGroup === "admin"
-                      ) {
-                        return (
-                          <Button
-                            className="btn--four"
-                            onClick={playerSold}
-                            // disabled={bidLock}
-                          >
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            Sold
                           </Button>
                         );
                       }

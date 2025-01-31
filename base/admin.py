@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Player, AuctionBid, activePlayer, User
+from .models import Player, AuctionBid, activePlayer, User, ranNum
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -29,3 +29,4 @@ admin.site.register(User, UserAdminConfig)
 admin.site.register(Player)
 admin.site.register(AuctionBid)
 admin.site.register(activePlayer)
+admin.site.register(ranNum)
