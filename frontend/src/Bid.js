@@ -119,12 +119,12 @@ const Bid = () => {
     }
   };
 
+  const [changingPlayer, setChangingPlayer] = useState(false);
   useEffect(() => {
     fetchAndCalculateTeamSquads();
     getResponse();
   }, [player_id, changingPlayer]);
 
-  const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
     if (changingPlayer) return;
     const activeplayer = await axios.get(`/api/active-player/1`);
