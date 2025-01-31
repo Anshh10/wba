@@ -119,12 +119,13 @@ const Bid = () => {
     }
   };
 
-  const [changingPlayer, setChangingPlayer] = useState(false);
+  const [ranNum, setranNum] = useState(0);
   useEffect(() => {
     fetchAndCalculateTeamSquads();
     getResponse();
-  }, [player_id, changingPlayer]);
+  }, [player_id, ranNum]);
 
+  const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
     if (changingPlayer) return;
     const activeplayer = await axios.get(`/api/active-player/1`);
@@ -222,6 +223,7 @@ const Bid = () => {
       data: formField,
     })
       .then(function (response) {
+        setranNum(ranNum + 1);
         // console.log(response);
         setCurrentBid(response.data.amount);
       })
