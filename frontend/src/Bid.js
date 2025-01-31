@@ -124,6 +124,7 @@ const Bid = () => {
   useEffect(() => {
     fetchAndCalculateTeamSquads();
     getResponse();
+    setCurrentBidder("");
   }, [player_id, ranNum]);
 
   const [changingPlayer, setChangingPlayer] = useState(false);
