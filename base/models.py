@@ -25,7 +25,7 @@ class Player(models.Model):
     Stumping = models.CharField(max_length=50000, null=True, blank=True)
     basePrice = models.CharField(max_length=50000, null=True, blank=True)
     nationality = models.CharField(max_length=50000, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.CharField(max_length=50000, null=True, blank=True)
     amt = models.CharField(max_length=50000, null=True, blank=True)
     assignedTo = models.CharField(max_length=50000, null=True, blank=True)
 

@@ -87,8 +87,6 @@ const Bid = () => {
 
       setplayers(allPlayers);
 
-      // Initialize budget
-
       // Create squads, ensuring all users with accessGroup "player" are included
       const squads = playerUsers.reduce((teams, user) => {
         const userName = user.username; // Use user name or any unique identifier for the team
@@ -227,22 +225,22 @@ const Bid = () => {
         console.log(error);
       });
 
-    let formField2 = new FormData();
+    // let formField2 = new FormData();
 
-    formField2.append("activePlayer_id", "2");
-    // formField.append("teamname", user.username);
+    // formField2.append("activePlayer_id", "2");
+    // // formField.append("teamname", user.username);
 
-    await axios({
-      method: "put",
-      url: `/api/active-player/1/`,
-      data: formField2,
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // await axios({
+    //   method: "put",
+    //   url: `/api/active-player/1/`,
+    //   data: formField2,
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
 
   const [selectedIndex, setSelectedIndex] = useState(0); // Track index in unsoldPlayers
