@@ -124,7 +124,9 @@ const Bid = () => {
     getResponse();
   }, [player_id]);
 
+  const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
+    if (changingPlayer) return;
     const activeplayer = await axios.get(`/api/active-player/1`);
     setplayer_id(activeplayer.data.activePlayer_id);
 
@@ -171,8 +173,10 @@ const Bid = () => {
   };
 
   useEffect(() => {
-    getBids(); // Fetch initially
-    const interval = setInterval(getBids, 1000); // Fetch every second
+    if (!changingPlayer) {
+      getBids();
+    }
+    const interval = setInterval(getBids, 2000); // Fetch every second
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
@@ -196,7 +200,7 @@ const Bid = () => {
       data: formField,
     })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
         setCurrentBid(response.data.amount);
       })
       .catch(function (error) {
@@ -218,7 +222,7 @@ const Bid = () => {
       data: formField,
     })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
         setCurrentBid(response.data.amount);
       })
       .catch(function (error) {
@@ -243,25 +247,33 @@ const Bid = () => {
     //   });
   }
 
-  const [selectedIndex, setSelectedIndex] = useState(0); // Track index in unsoldPlayers
-
   const handlePlayerChange = async (direction) => {
-    let newIndex = selectedIndex + direction;
+    setChangingPlayer(true); // Prevent `getBids` from running
 
-    // Ensure the index stays within bounds
-    if (newIndex < 0 || newIndex >= players.length) return;
+    const newPlayerId = player_id + direction;
 
-    const newPlayer = players[newIndex];
-    setSelectedIndex(newIndex);
+    // Ensure the new player ID exists in the players array
+    if (!players.some((player) => player.id === newPlayerId)) {
+      setChangingPlayer(false); // Reset if no valid player found
+      return;
+    }
 
+    // Update state
+    setplayer_id(newPlayerId);
+
+    // Prepare form data
     const formField2 = new FormData();
-    formField2.append("activePlayer_id", newPlayer.id);
+    formField2.append("activePlayer_id", newPlayerId);
 
+    // Send API request
     try {
-      const response = await axios.put(`/api/active-player/1/`, formField2);
-      console.log("Response:", response);
+      await axios.put(`/api/active-player/1/`, formField2);
     } catch (error) {
       console.error("Error updating active player:", error);
+    } finally {
+      setTimeout(() => {
+        setChangingPlayer(false); // Allow getBids to run again after a short delay
+      }, 500);
     }
   };
 
@@ -326,7 +338,7 @@ const Bid = () => {
                           className="btn--secondary"
                           style={{ margin: "0 5px" }}
                           onClick={() => handlePlayerChange(-1)}
-                          disabled={selectedIndex === 0}
+                          disabled={player_id === 0}
                         >
                           Previous Player
                         </Button>
@@ -334,7 +346,7 @@ const Bid = () => {
                           className="btn--secondary"
                           style={{ margin: "0 5px" }}
                           onClick={() => handlePlayerChange(1)}
-                          disabled={selectedIndex === players.length - 1}
+                          disabled={player_id === players.length - 1}
                         >
                           Next Player
                         </Button>
@@ -642,6 +654,15 @@ const Bid = () => {
           )}
         </Accordion>
       </Container>
+      {(() => {
+        if (
+          typeof user !== "undefined" &&
+          typeof user.username !== "undefined" &&
+          user.accessGroup === "admin"
+        ) {
+          return <p>{player_id}</p>;
+        }
+      })()}
     </div>
   );
 };
