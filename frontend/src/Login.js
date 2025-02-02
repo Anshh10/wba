@@ -55,7 +55,7 @@ function Login() {
     const user = username.toString();
     const pass = password.toString();
 
-    formField.append("username", user);
+    formField.append("email", user);
     formField.append("password", pass);
 
     await axios({
@@ -84,7 +84,6 @@ function Login() {
           <Row>
             <Col>
               <h2>Sign In</h2>
-              <p className="loginTag">Login to access the world of Vyapaar</p>
               <Form onSubmit={handleSubmit}>
                 <Form.Group
                   className={
@@ -96,12 +95,12 @@ function Login() {
                   <Form.Control
                     name="username"
                     className="customInput"
-                    placeholder="Username"
+                    placeholder="Email ID"
                     value={username}
                     onChange={handleUserNameChange}
                   />
                   {submitted && !username && (
-                    <div className="help-block">Username is required</div>
+                    <div className="help-block">Email ID is required</div>
                   )}
                 </Form.Group>
 

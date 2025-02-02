@@ -74,7 +74,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True, editable=False)
     accessGroup = models.CharField(max_length=500, null=True, blank=True)
     username = models.CharField(max_length=500, unique=True)
-    email = models.EmailField(_('email address'), null=True, blank=True)
+    email = models.EmailField(
+        _('email address'), unique=True, null=False, blank=False)
     userbudget = models.CharField(max_length=2000, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -83,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
 

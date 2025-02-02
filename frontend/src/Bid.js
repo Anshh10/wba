@@ -293,9 +293,12 @@ const Bid = () => {
               </h2>
               {(() => {
                 if (
-                  typeof user !== "undefined" &&
-                  typeof user.username !== "undefined" &&
-                  user.accessGroup === "player"
+                  (typeof user !== "undefined" &&
+                    typeof user.username !== "undefined" &&
+                    user.accessGroup === "player") ||
+                  (typeof user !== "undefined" &&
+                    typeof user.username !== "undefined" &&
+                    user.accessGroup === "abc")
                 ) {
                   return (
                     <>
@@ -540,9 +543,12 @@ const Bid = () => {
                           </OverlayTrigger>
                         );
                       } else if (
-                        typeof user !== "undefined" &&
-                        typeof user.username !== "undefined" &&
-                        user.accessGroup === "player"
+                        (typeof user !== "undefined" &&
+                          typeof user.username !== "undefined" &&
+                          user.accessGroup === "player") ||
+                        (typeof user !== "undefined" &&
+                          typeof user.username !== "undefined" &&
+                          user.accessGroup === "abc")
                       ) {
                         return (
                           <Button
