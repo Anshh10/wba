@@ -359,30 +359,6 @@ const Bid = () => {
                           Next Player
                         </Button>
                       </div>
-                      <h3>Previous Bids</h3>
-                      <Table responsive="md" striped bordered>
-                        <thead className="tableHead">
-                          <tr>
-                            <th>S. No.</th>
-                            <th>Team Name</th>
-                            <th>Bid Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody className="tableBody">
-                          {playerBids
-                            .slice(0)
-                            .reverse()
-                            .map((player, index) => (
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td style={{ textTransform: "capitalize" }}>
-                                  {player.teamname}
-                                </td>
-                                <td>₹{player.amount / 10000000} Cr</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </Table>
                     </>
                   );
                 }
@@ -675,7 +651,35 @@ const Bid = () => {
           typeof user.username !== "undefined" &&
           user.accessGroup === "admin"
         ) {
-          return <p>{player_id}</p>;
+          return (
+            <Container>
+              <p>{player_id}</p>
+              <h3>Previous Bids</h3>
+              <Table responsive="md" striped bordered>
+                <thead className="tableHead">
+                  <tr>
+                    <th>S. No.</th>
+                    <th>Team Name</th>
+                    <th>Bid Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="tableBody">
+                  {playerBids
+                    .slice(0)
+                    .reverse()
+                    .map((player, index) => (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td style={{ textTransform: "capitalize" }}>
+                          {player.teamname}
+                        </td>
+                        <td>₹{player.amount / 10000000} Cr</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </Container>
+          );
         }
       })()}
     </div>
