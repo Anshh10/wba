@@ -25,8 +25,14 @@ class UserAdminConfig(UserAdmin):
     list_display = ('username', 'email', )
 
 
+class BidResponseAdmin(admin.ModelAdmin):
+    # Fields to display in the list view
+    list_display = ('teamname', 'amount', 'player_id')
+    search_fields = ('player_id', 'id')  # Fields to search for responses
+
+
 admin.site.register(User, UserAdminConfig)
 admin.site.register(Player)
-admin.site.register(AuctionBid)
+admin.site.register(AuctionBid, BidResponseAdmin)
 admin.site.register(activePlayer)
 admin.site.register(ranNum)
