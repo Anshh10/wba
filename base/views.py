@@ -80,38 +80,6 @@ def auction_bids(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        player_id = request.data.get('player_id')
-
-        if not player_id:
-            return Response({"error": "player_id is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            player = Player.objects.get(id=player_id)
-        except Player.DoesNotExist:
-            return Response({"error": "Player not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch the latest bid for this player
-        last_bid = AuctionBid.objects.filter(
-            player_id=player.id).order_by('-lock_timestamp').first()
-
-        # Determine lock time based on the bid amount
-        # Assume `amount` is part of the request data
-        bid_amount = request.data.get('amount')
-        if not bid_amount:
-            return Response({"error": "Bid amount is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            bid_amount = float(bid_amount)
-        except ValueError:
-            return Response({"error": "Invalid bid amount"}, status=status.HTTP_400_BAD_REQUEST)
-
-        lock_time = 1.5 if bid_amount < 20000000 else 3.5
-
-        # Check if a lock exists
-        if last_bid and last_bid.lock_timestamp and (timezone.now() - last_bid.lock_timestamp) < timedelta(seconds=lock_time):
-            return Response({"error": f"Bidding for {player.name} is locked. Please wait."}, status=status.HTTP_429_TOO_MANY_REQUESTS)
-
-        # Create and save the new bid
         serializer = AuctionBidSerializer(data=request.data)
         if serializer.is_valid():
             bid = serializer.save()
@@ -119,7 +87,6 @@ def auction_bids(request):
             bid.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
