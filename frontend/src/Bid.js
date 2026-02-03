@@ -130,7 +130,7 @@ const Bid = () => {
   const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
     if (changingPlayer) return;
-    const activeplayer = await axios.get(`/api/active-player/1`);
+    const activeplayer = await axios.get(`/api/active-player/2`);
     setplayer_id(activeplayer.data.activePlayer_id);
 
     const res4 = await axios.get(`/api/ran-num/${1}`);
@@ -350,6 +350,10 @@ const Bid = () => {
                         >
                           Previous Player
                         </Button>
+                      <Form>
+                        <Form.Field</Form>
+                      </Form>
+
                         <Button
                           className="btn--secondary"
                           style={{ margin: "0 5px" }}
