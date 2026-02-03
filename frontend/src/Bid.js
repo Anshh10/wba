@@ -158,7 +158,7 @@ const Bid = () => {
           // Set lock duration based on bid amount
           const lockDuration = bidAmount < 20000000 ? 1500 : 3000;
 
-          setBidLock(false);
+          setBidLock(currentTime - lockTime < lockDuration);
         } else {
           setBidLock(false);
         }
