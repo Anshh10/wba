@@ -130,7 +130,7 @@ const Bid = () => {
   const [changingPlayer, setChangingPlayer] = useState(false);
   const getBids = async () => {
     if (changingPlayer) return;
-    const activeplayer = await axios.get(`/api/active-player/2`);
+    const activeplayer = await axios.get(`/api/active-player/3`);
     setplayer_id(activeplayer.data.activePlayer_id);
 
     const res4 = await axios.get(`/api/ran-num/${1}`);
@@ -272,7 +272,7 @@ const Bid = () => {
 
     // Send API request
     try {
-      await axios.put("/api/active-player/2", formField2);
+      await axios.put("/api/active-player/3", formField2);
     } catch (error) {
       console.error("Error updating active player:", error);
     } finally {
