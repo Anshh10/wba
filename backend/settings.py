@@ -91,8 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wbaDb',
         'USER': 'doadmin',
-        'PASSWORD': 'AVNS_ZqMHQ7eOxcqeRiMWA2x',
-        'HOST': 'dbaas-db-6081896-do-user-22238104-0.j.db.ondigitalocean.com',
+        'PASSWORD': 'AVNS_NDtEeN-HC5STZb6HVML',
+        'HOST': 'dbaas-db-5018501-do-user-22238104-0.j.db.ondigitalocean.com',
         'PORT': 25060,
     }
 }
