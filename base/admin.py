@@ -5,8 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 
 class UserAdminConfig(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email',
-         'username', 'userbudget', 'accessGroup', 'password',)}),
+        (None, {'fields': (
+         'email', 'userbudget', 'accessGroup', 'password',)}),
         ('Permissions', {
          'fields': ('is_staff', 'is_active', 'is_superuser')}),
     )
@@ -14,15 +14,15 @@ class UserAdminConfig(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email',  'password1', 'password2', 'username', 'userbudget', 'accessGroup',
+            'fields': ('email',  'password1', 'password2', 'email', 'userbudget', 'accessGroup',
                        'is_staff', 'is_active', 'is_superuser',)}),
     )
 
-    search_fields = ('email', 'username',
+    search_fields = ('email',
                      'accessGroup',)
     list_filter = ('accessGroup', )
-    ordering = ('-username', )
-    list_display = ('username', 'email', )
+    ordering = ('-email', )
+    list_display = ('email',)
 
 
 class BidResponseAdmin(admin.ModelAdmin):

@@ -55,14 +55,14 @@ const Bid = () => {
     setunsoldPlayers(unsold);
 
     const filteredData = res2.data.filter(
-      (player) => player.assignedTo === user.username
+      (player) => player.assignedTo === user.email,
     );
     setteamSquad(filteredData);
     console.log(user.user_id, filteredData);
 
     const totalAmt = filteredData.reduce(
       (sum, player) => sum + player.amt * 1,
-      0
+      0,
     );
 
     const res3 = await axios.get(`/api/user/player/${user.user_id}`);
@@ -80,7 +80,7 @@ const Bid = () => {
 
       // Filter users with accessGroup "player"
       const playerUsers = allUsers.filter(
-        (user) => user.accessGroup === "player"
+        (user) => user.accessGroup === "player",
       );
 
       // Fetch players
@@ -91,7 +91,7 @@ const Bid = () => {
 
       // Create squads, ensuring all users with accessGroup "player" are included
       const squads = playerUsers.reduce((teams, user) => {
-        const userName = user.username; // Use user name or any unique identifier for the team
+        const userName = user.email; // Use user name or any unique identifier for the team
 
         if (!teams[userName]) {
           teams[userName] = {
@@ -102,7 +102,7 @@ const Bid = () => {
 
         // Attach players assigned to this user
         const assignedPlayers = allPlayers.filter(
-          (player) => player.assignedTo === userName
+          (player) => player.assignedTo === userName,
         );
         teams[userName].players.push(...assignedPlayers);
 
@@ -138,7 +138,7 @@ const Bid = () => {
 
     try {
       const bid = await axios.get(
-        `/api/player-bids/${activeplayer.data.activePlayer_id}`
+        `/api/player-bids/${activeplayer.data.activePlayer_id}`,
       );
       setplayerBids(bid.data);
 
@@ -196,7 +196,7 @@ const Bid = () => {
       formField.append("amount", nextBid);
     }
     formField.append("player_id", player_id);
-    formField.append("teamname", user.username);
+    formField.append("teamname", user.email);
 
     await axios({
       method: "post",
@@ -218,7 +218,7 @@ const Bid = () => {
 
     formField.append("assignedTo", currentBidder);
     formField.append("amt", currentBid);
-    // formField.append("teamname", user.username);
+    // formField.append("teamname", user.email);
 
     await axios({
       method: "put",
@@ -237,7 +237,7 @@ const Bid = () => {
     let formField2 = new FormData();
 
     formField2.append("num", ranNum * 1 + 1);
-    // formField.append("teamname", user.username);
+    // formField.append("teamname", user.email);
 
     await axios({
       method: "put",
@@ -289,15 +289,15 @@ const Bid = () => {
           <Row>
             <Col>
               <h2 style={{ textTransform: "capitalize" }}>
-                Team - {user.username}
+                Team - {user.email}
               </h2>
               {(() => {
                 if (
                   (typeof user !== "undefined" &&
-                    typeof user.username !== "undefined" &&
+                    typeof user.email !== "undefined" &&
                     user.accessGroup === "player") ||
                   (typeof user !== "undefined" &&
-                    typeof user.username !== "undefined" &&
+                    typeof user.email !== "undefined" &&
                     user.accessGroup === "abc")
                 ) {
                   return (
@@ -336,7 +336,7 @@ const Bid = () => {
                   );
                 } else if (
                   typeof user !== "undefined" &&
-                  typeof user.username !== "undefined" &&
+                  typeof user.email !== "undefined" &&
                   user.accessGroup === "admin"
                 ) {
                   return (
@@ -452,7 +452,7 @@ const Bid = () => {
                         );
                       } else if (
                         typeof user !== "undefined" &&
-                        typeof user.username !== "undefined" &&
+                        typeof user.email !== "undefined" &&
                         user.accessGroup === "admin"
                       ) {
                         return (
@@ -493,7 +493,7 @@ const Bid = () => {
                             </Row>
                           </OverlayTrigger>
                         );
-                      } else if (currentBidder === user.username) {
+                      } else if (currentBidder === user.email) {
                         return (
                           <OverlayTrigger
                             style={{ width: "100%" }}
@@ -520,10 +520,10 @@ const Bid = () => {
                         );
                       } else if (
                         (typeof user !== "undefined" &&
-                          typeof user.username !== "undefined" &&
+                          typeof user.email !== "undefined" &&
                           user.accessGroup === "player") ||
                         (typeof user !== "undefined" &&
-                          typeof user.username !== "undefined" &&
+                          typeof user.email !== "undefined" &&
                           user.accessGroup === "abc")
                       ) {
                         return (
@@ -608,7 +608,7 @@ const Bid = () => {
               ([teamName, { players: squad, budget }], index) => (
                 <Accordion.Item eventKey={index.toString()} key={teamName}>
                   <Accordion.Header>
-                    {teamName === user.username
+                    {teamName === user.email
                       ? `${teamName} (Your Team)`
                       : teamName}{" "}
                     | ₹{budget / 10000000} Cr
@@ -638,7 +638,7 @@ const Bid = () => {
                     )}
                   </Accordion.Body>
                 </Accordion.Item>
-              )
+              ),
             )
           ) : (
             <p>No squads found.</p>
@@ -648,7 +648,7 @@ const Bid = () => {
       {(() => {
         if (
           typeof user !== "undefined" &&
-          typeof user.username !== "undefined" &&
+          typeof user.email !== "undefined" &&
           user.accessGroup === "admin"
         ) {
           return (
@@ -669,7 +669,7 @@ const Bid = () => {
                     .reverse()
                     .map((player, index) => (
                       <tr>
-                        <td>{index + 1}</td>
+                        <td> {index + 1}</td>
                         <td style={{ textTransform: "capitalize" }}>
                           {player.teamname}
                         </td>

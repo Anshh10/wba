@@ -36,56 +36,63 @@ class Player(models.Model):
     assignedTo = models.CharField(max_length=50000, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.id) + " " + self.name
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, accessGroup, username, email=None, password=None, **other_fields):
-        if not username:
-            raise ValueError('The Team Name field must be set')
 
-        user = self.model(accessGroup=accessGroup,
-                          username=username, email=email, **other_fields)
+    def create_user(self, email, password=None, **other_fields):
+        if not email:
+            raise ValueError('Email must be provided')
 
-        if password:
-            user.set_password(password)
-        else:
-            raise ValueError('The Password field must be set')
+        if not password:
+            raise ValueError('Password must be provided')
 
+        email = self.normalize_email(email)
+
+        user = self.model(
+            email=email,
+            **other_fields
+        )
+
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email=None, password=None, **other_fields):
+    def create_superuser(self, email,  password=None, **other_fields):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
-
-        accessGroup = 'admin'
+        other_fields.setdefault('accessGroup', 'admin')
 
         if other_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if other_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+            raise ValueError('Superuser must have is_staff=True')
 
-        return self.create_user(accessGroup, username, email, password, **other_fields)
+        if other_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True')
+
+        return self.create_user(
+            email=email,
+            password=password,
+            **other_fields
+        )
 
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True, editable=False)
+
+    email = models.EmailField('email address', unique=True)
     accessGroup = models.CharField(max_length=500, null=True, blank=True)
-    username = models.CharField(max_length=500, unique=True)
-    email = models.EmailField(
-        _('email address'), unique=True, null=False, blank=False)
     userbudget = models.CharField(max_length=2000, null=True, blank=True)
+
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = []   # email + password only
 
 
 class AuctionBid(models.Model):

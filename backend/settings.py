@@ -84,19 +84,26 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# https: // docs.djangoproject.com/en/5.1/ref/settings/  # databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wbaDb',
         'USER': 'doadmin',
-        'PASSWORD': 'AVNS_kuYiEpzMf5JE9jP7spv',
-        'HOST': 'dbaas-db-9813831-do-user-18920330-0.j.db.ondigitalocean.com',
+        'PASSWORD': 'AVNS_ZqMHQ7eOxcqeRiMWA2x',
+        'HOST': 'dbaas-db-6081896-do-user-22238104-0.j.db.ondigitalocean.com',
         'PORT': 25060,
     }
 }
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

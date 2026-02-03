@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Bid from "./Bid";
 import Login from "./Login";
 import HomeScreen from "./HomeScreen";
+import CountdownTimer from "./CountdownTimer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Layout />} exact>
             <Route path="" element={<HomeScreen />} />
             <Route path="bid" element={<Bid />} />
+            <Route path="counter" element={<CountdownTimer />} />
             <Route path="login" element={<Login />} />
           </Route>
         </Routes>

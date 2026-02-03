@@ -19,7 +19,7 @@ const Layout = () => {
           <div
             style={{
               minHeight: "100vh",
-              paddingTop: "2vh",
+              // paddingTop: "2vh",
             }}
           >
             <div style={{ position: "absolute", zIndex: "0" }}></div>
