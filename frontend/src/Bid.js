@@ -350,10 +350,6 @@ const Bid = () => {
                         >
                           Previous Player
                         </Button>
-                      <Form>
-                        <Form.Field</Form>
-                      </Form>
-
                         <Button
                           className="btn--secondary"
                           style={{ margin: "0 5px" }}
