@@ -272,7 +272,7 @@ const Bid = () => {
 
     // Send API request
     try {
-      await axios.put(`/api/active-player/2`, formField2);
+      await axios.put("/api/active-player/2", formField2);
     } catch (error) {
       console.error("Error updating active player:", error);
     } finally {
